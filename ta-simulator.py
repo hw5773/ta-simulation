@@ -2,14 +2,16 @@ import os, sys, argparse, logging
 import freshmen as fp
 import course as co
 
-def simulation(interval, init, fresh, courses, number, one, half, additional, must):
+def simulation(interval, init, fresh, prediction, courses, number, one, half, additional, must):
     X, y = fp.preprocessing(fresh)
     model = fp.generate_model(X, y)
     output = fp.predict(model, X, interval)
-    #integrated = output[i][0]
-    #phd = output[i][1]
-    integrated = 10
-    phd = 7
+    if prediction:
+        integrated = output[i][0]
+        phd = output[i][1]
+    else:
+        integrated = 10
+        phd = 7
  
     prev_supply = 0
     for i in range(interval):
@@ -40,6 +42,7 @@ def simulation(interval, init, fresh, courses, number, one, half, additional, mu
 def command_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--fresh", help="Freshmen data", type=str, required=True)
+    parser.add_argument("-z", "--prediction", help="Prediction (yes/no)", default=False, action="store_true")
     parser.add_argument("-c", "--course", help="Course data", type=str, required=True)
     parser.add_argument("-n", "--number", help="KENTECH students", type=int, required=True)
     parser.add_argument("-a", "--additional", help="Additional TA numbers (IR, capstone, or graduate courses)", type=int, required=True)
